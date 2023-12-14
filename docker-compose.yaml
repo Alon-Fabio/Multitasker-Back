@@ -1,0 +1,76 @@
+version: "3.7"
+
+services:
+  # Backhand node Server
+  backend:
+    container_name: backend
+    build: ./Multitasker-API
+    volumes:
+      - ./Multitasker-API:/home/node/Multitasker-api
+    command: npm start
+    working_dir: /home/node/Multitasker-api
+    ports:
+      - "5000:5000"
+    links:
+      - postgres
+      - redis
+    depends_on:
+      - redis
+      - postgres
+    env_file:
+      - backend.env
+    restart: always
+    networks:
+      - nginx_server
+      - databases
+
+  # Nginx revers server
+  nginx:
+    container_name: "nginx-service"
+    build:
+      context: .
+      dockerfile: Multitasker-API/nginx.Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./Multitasker-API:/config
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /tmp/acme_challenge:/tmp/acme_challenge
+    networks:
+      - nginx_server
+    restart: always
+    depends_on:
+      - backend
+
+  # Postgres Service
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    build: ./Multitasker-API/postgres/
+    restart: always
+    env_file:
+      - postgresql.env
+    volumes:
+      - ./Multitasker-API/pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    stop_grace_period: 5s
+    networks:
+      - databases
+
+  #Redis service
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - databases
+
+# Docker network
+networks:
+  nginx_server:
+  databases:
+    # driver: bridge (brige is the default) Test it without this setting.

@@ -1,0 +1,19 @@
+
+# node modules
+Multitasker-API/node_modules 
+
+# Keys
+Multitasker-API/secret.js
+Multitasker-API/secret.env
+backend.env
+postgresql.env
+
+# postgres-database
+Multitasker-API/postgres-data
+Multitasker-API/postgres/seed/seed.sql
+Multitasker-API/pg-data
+Multitasker-API/note.md
+
+# Dev
+Multitasker-API/app.js
+Multitasker-API/build
