@@ -32,17 +32,7 @@ const db = Knex({
 
 // ================================================== Cors config =====================================================
 
-const whitelist = [
-  "https://www.alonfabio.com",
-  "https://www.alonfabio.com/Per/Photoraphy",
-  "https://www.alonfabio.com/Per/Gallery",
-  "https://multitasker.alonfabio.com",
-  "http://multitasker.alonfabio.com",
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "http://localhost:8080",
-  "http://localhost/*",
-];
+const whitelist = ["http://localhost/*"];
 
 const CustomOrigin: CorsOptions = {
   origin: function (origin, callback) {
@@ -111,11 +101,6 @@ app.post(
   }
 );
 
-// AlonFabio.com:
-app.get("/gallery/:folder", cors(CustomOrigin), (req, res) => {
-  gallery.getImages(req, res, db);
-});
-
 // Admin:
 app.post(
   "/admin/getUsers",
@@ -125,10 +110,6 @@ app.post(
     admin.getUsers(db, res, req);
   }
 );
-
-app.post("/gallery/update", cors(CustomOrigin), (req, res) => {
-  gallery.updateImages(req, res, db);
-});
 
 // Server checks:
 app.post("/health-check", (req, res) => {

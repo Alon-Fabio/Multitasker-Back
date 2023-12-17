@@ -22,17 +22,7 @@ const db = (0, knex_1.default)({
     client: "postgres",
     connection: process.env.POSTGRES_URI || POSTGRES_URI,
 });
-const whitelist = [
-    "https://www.alonfabio.com",
-    "https://www.alonfabio.com/Per/Photoraphy",
-    "https://www.alonfabio.com/Per/Gallery",
-    "https://multitasker.alonfabio.com",
-    "http://multitasker.alonfabio.com",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:8080",
-    "http://localhost/*",
-];
+const whitelist = ["http://localhost/*"];
 const CustomOrigin = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin ? origin : "") !== -1 || !origin) {
@@ -71,14 +61,8 @@ app.put("/image", cors(CustomOrigin), auth.getAuthentication, (req, res) => {
 app.post("/imageurl", cors(CustomOrigin), auth.getAuthentication, (req, res) => {
     image.handleApiCall(req, res);
 });
-app.get("/gallery/:folder", cors(CustomOrigin), (req, res) => {
-    gallery.getImages(req, res, db);
-});
 app.post("/admin/getUsers", cors(CustomOrigin), auth.getAuthentication, (req, res) => {
     admin.getUsers(db, res, req);
-});
-app.post("/gallery/update", cors(CustomOrigin), (req, res) => {
-    gallery.updateImages(req, res, db);
 });
 app.post("/health-check", (req, res) => {
     health.testHandler(res, req);

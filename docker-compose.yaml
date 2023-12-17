@@ -73,4 +73,3 @@ services:
 networks:
   nginx_server:
   databases:
-    # driver: bridge (brige is the default) Test it without this setting.
